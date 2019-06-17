@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2018 Larry Myers
+Copyright (c) 2018 Larry Myers (Original TypeScript version - https://github.com/larrymyers/protoc-gen-twirp_typescript)
+Copyright (c) 2019 Andrey Sokolov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

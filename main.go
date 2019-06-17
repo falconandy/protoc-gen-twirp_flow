@@ -7,7 +7,8 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
-	"go.larrymyers.com/protoc-gen-twirp_typescript/generator"
+
+	"github.com/falconandy/protoc-gen-twirp_flow/generator"
 )
 
 func main() {
@@ -44,16 +45,16 @@ func generate(in *plugin.CodeGeneratorRequest) *plugin.CodeGeneratorResponse {
 	}
 
 	for _, f := range in.GetProtoFile() {
-		files, err := gen.Generate(f)
-		if err != nil {
-			resp.Error = proto.String(err.Error())
-			return resp
-		}
-
-		for _, cf := range files {
-			resp.File = append(resp.File, cf)
-		}
+		gen.Prepare(f)
 	}
+
+	files, err := gen.Generate()
+	if err != nil {
+		resp.Error = proto.String(err.Error())
+		return resp
+	}
+
+	resp.File = files
 
 	return resp
 }

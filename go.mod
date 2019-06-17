@@ -1,7 +1,3 @@
-module go.larrymyers.com/protoc-gen-twirp_typescript
+module github.com/falconandy/protoc-gen-twirp_flow
 
-require (
-	github.com/golang/protobuf v1.2.0
-	github.com/rs/cors v1.6.0
-	github.com/twitchtv/twirp v5.5.0+incompatible
-)
+require github.com/golang/protobuf v1.3.1

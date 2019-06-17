@@ -6,43 +6,40 @@ import (
 )
 
 func RuntimeLibrary() *plugin.CodeGeneratorResponse_File {
-	tmpl := `
-export interface TwirpErrorJSON {
-    code: string;
-    msg: string;
-    meta: {[index:string]: string};
+	tmpl := `// @flow strict
+import axios from "axios";
+
+type TwirpErrorJSON = {
+  code: string;
+  msg: string;
+  meta: { [index: string]: string };
 }
 
 export class TwirpError extends Error {
-    code: string;
-    meta: {[index:string]: string};
+  code: string;
+  meta: { [index: string]: string };
 
-    constructor(te: TwirpErrorJSON) {
-        super(te.msg);
+  constructor(te: TwirpErrorJSON) {
+    super(te.msg);
 
-        this.code = te.code;
-        this.meta = te.meta;
-    }
+    this.code = te.code;
+    this.meta = te.meta;
+  }
 }
 
-export const throwTwirpError = (resp: Response) => {
-    return resp.json().then((err: TwirpErrorJSON) => { throw new TwirpError(err); })
-};
-
-export const createTwirpRequest = (url: string, body: object): Request => {
-    return new Request(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-    });
-};
-
-export type Fetch = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
-`
+export async function sendTwirpRequest<I, O>(url: string, body: I): Promise<O> {
+  try {
+    const resp = await axios.post(url, body);
+    return (resp.data: O);
+  } catch (err) {
+    if (err.response) {
+      throw new TwirpError((err.response.data: TwirpErrorJSON));
+    }
+    throw err;
+  }
+}`
 	cf := &plugin.CodeGeneratorResponse_File{}
-	cf.Name = proto.String("twirp.ts")
+	cf.Name = proto.String("twirp.js")
 	cf.Content = proto.String(tmpl)
 
 	return cf
