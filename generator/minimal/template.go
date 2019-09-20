@@ -7,7 +7,7 @@ import (
 )
 
 const apiTemplate = `// @flow strict
-import { sendTwirpRequest } from './twirp';
+import { sendTwirpRequest } from "./twirp";
 {{imports .}}
 {{range .Models}}
 {{- if not .Primitive}}
@@ -157,8 +157,8 @@ func imports(ctx *APIContext) string {
 
 		fileName = strings.TrimSuffix(fileName, ".js")
 		for _, modelName := range modelNames {
-			items = append(items, fmt.Sprintf("import type { %s, %sJSON } from './%s';", modelName, modelName, fileName))
-			items = append(items, fmt.Sprintf("import { %sToJSON, JSONTo%s } from './%s';", modelName, modelName, fileName))
+			items = append(items, fmt.Sprintf(`import type { %s, %sJSON } from "./%s";`, modelName, modelName, fileName))
+			items = append(items, fmt.Sprintf(`import { %sToJSON, JSONTo%s } from "./%s";`, modelName, modelName, fileName))
 		}
 	}
 
