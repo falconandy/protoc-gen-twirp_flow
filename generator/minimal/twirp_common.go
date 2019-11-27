@@ -7,6 +7,7 @@ import (
 
 func RuntimeLibrary() *plugin.CodeGeneratorResponse_File {
 	tmpl := `// @flow strict
+/* eslint-disable */
 import axios from "axios";
 
 type TwirpErrorJSON = {

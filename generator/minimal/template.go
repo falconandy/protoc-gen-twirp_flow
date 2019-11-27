@@ -7,6 +7,7 @@ import (
 )
 
 const apiTemplate = `// @flow strict
+/* eslint-disable */
 import { sendTwirpRequest } from "./twirp";
 {{imports .}}
 {{range .Models}}
