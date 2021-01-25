@@ -10,33 +10,33 @@ const apiTemplate = `// @flow strict
 /* eslint-disable */
 import { sendTwirpRequest } from "./twirp";
 {{imports .}}
-{{range .Models}}
+{{- range .Models}}
 {{- if not .Primitive}}
 export type {{.Name}} = {
-  {{range .Fields -}}
+  {{- range .Fields}}
   {{.Name}}: {{if .IsMessage}}{{if .IsRepeated}}{{else}}?{{end}}{{end}}{{.Type}};
-  {{end}}
+  {{- end}}
 }
 
 export type {{.Name}}JSON = {
-  {{range .Fields -}}
+  {{- range .Fields}}
   {{.JSONName}}?: {{.JSONType}};
-  {{end}}
+  {{- end}}
 }
 
 export function {{.Name}}ToJSON(m: {{.Name}}): {{.Name}}JSON {
   return {
-    {{range .Fields -}}
+    {{- range .Fields}}
     {{.JSONName}}: {{stringify .}},
-    {{end}}
+    {{- end}}
   };
 }
 
 export function JSONTo{{.Name}}(m: {{.Name}}JSON): {{.Name}} {
   return {
-    {{range .Fields -}}
+    {{- range .Fields}}
     {{.Name}}: {{parse .}},
-    {{end}}
+    {{- end}}
   };
 }
 {{end -}}
@@ -44,20 +44,20 @@ export function JSONTo{{.Name}}(m: {{.Name}}JSON): {{.Name}} {
 
 {{- $twirpPrefix := .TwirpPrefix -}}
 {{$Ctx := .}}
-{{range .Services}}
+{{- range .Services}}
 export class {{.Name}} {
   hostname: string;
-  pathPrefix = "{{$twirpPrefix}}/{{.Package}}.{{.Name}}/";
+  pathPrefix: string = "{{$twirpPrefix}}/{{.Package}}.{{.Name}}/";
 
   constructor(hostname: string) {
     this.hostname = hostname;
   }
-
   {{- range .Methods}}
+
   {{methodBody $Ctx .}}
-  {{end}}
+  {{- end}}
 }
-{{end}}
+{{- end}}
 `
 
 func stringify(f ModelField) string {

@@ -30,7 +30,7 @@ export class TwirpError extends Error {
 
 export async function sendTwirpRequest<I, O>(url: string, body: I): Promise<O> {
   try {
-    const resp = await axios.post(url, body);
+    const resp = await axios.post(url, body, { withCredentials: true });
     return (resp.data: O);
   } catch (err) {
     if (err.response) {
